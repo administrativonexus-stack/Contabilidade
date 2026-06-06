@@ -109,7 +109,7 @@ function DashboardMockup() {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, delay: 1.5 }}
-        className="absolute -bottom-4 -right-3 bg-white border border-slate-200 rounded-xl px-4 py-3 flex items-center gap-3 shadow-lg"
+        className="hidden sm:flex absolute -bottom-4 -right-3 bg-white border border-slate-200 rounded-xl px-4 py-3 items-center gap-3 shadow-lg"
       >
         <span className="w-8 h-8 rounded-full bg-[#10B981]/10 flex items-center justify-center flex-shrink-0">
           <TrendingUp className="w-4 h-4 text-[#10B981]" />
@@ -125,7 +125,7 @@ function DashboardMockup() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, delay: 1.7 }}
-        className="absolute -top-3 -left-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 flex items-center gap-2 shadow-lg"
+        className="hidden sm:flex absolute -top-3 -left-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 items-center gap-2 shadow-lg"
       >
         <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
         <p className="text-xs font-semibold text-[#0F3D5E] whitespace-nowrap">

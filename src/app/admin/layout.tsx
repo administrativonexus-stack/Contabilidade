@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminMobileMenu from "@/components/admin/AdminMobileMenu";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -22,7 +23,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <AdminSidebar />
       <div className="lg:ml-60 flex flex-col min-h-screen">
         <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-10">
-          <p className="text-sm font-semibold text-[#0F3D5E]">Painel Administrativo</p>
+          <div className="flex items-center gap-2">
+            <AdminMobileMenu />
+            <p className="text-sm font-semibold text-[#0F3D5E]">Painel Administrativo</p>
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-400">{profile.full_name}</span>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#0F3D5E]/10 text-[#0F3D5E]">
