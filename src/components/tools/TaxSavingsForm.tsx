@@ -38,20 +38,21 @@ export default function TaxSavingsForm({ onChange }: Props) {
     mode: "onChange",
   });
 
-  const watched = watch();
-
   useEffect(() => {
-    const monthly = Number(watched.monthlyRevenue) || 0;
-    if (monthly >= 1000) {
-      onChange({
-        monthlyRevenue: monthly,
-        annualRevenue: Number(watched.annualRevenue) || monthly * 12,
-        businessType: watched.businessType ?? "servicos",
-        profitMargin: Number(watched.profitMargin) || 20,
-        currentRegime: watched.currentRegime ?? "simples",
-      });
-    }
-  }, [watched, onChange]);
+    const { unsubscribe } = watch((value) => {
+      const monthly = Number(value.monthlyRevenue) || 0;
+      if (monthly >= 1000) {
+        onChange({
+          monthlyRevenue: monthly,
+          annualRevenue: Number(value.annualRevenue) || monthly * 12,
+          businessType: value.businessType ?? "servicos",
+          profitMargin: Number(value.profitMargin) || 20,
+          currentRegime: value.currentRegime ?? "simples",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, onChange]);
 
   return (
     <div className="space-y-5">

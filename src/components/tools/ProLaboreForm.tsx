@@ -36,19 +36,20 @@ export default function ProLaboreForm({ onChange }: Props) {
     mode: "onChange",
   });
 
-  const watched = watch();
-
   useEffect(() => {
-    const profit = Number(watched.monthlyProfit) || 0;
-    const proLabore = Number(watched.proLabore) || 0;
-    if (profit >= 1412 && proLabore >= 1412) {
-      onChange({
-        monthlyProfit: profit,
-        proLabore,
-        regime: watched.regime ?? "simples",
-      });
-    }
-  }, [watched, onChange]);
+    const { unsubscribe } = watch((value) => {
+      const profit = Number(value.monthlyProfit) || 0;
+      const proLabore = Number(value.proLabore) || 0;
+      if (profit >= 1412 && proLabore >= 1412) {
+        onChange({
+          monthlyProfit: profit,
+          proLabore,
+          regime: value.regime ?? "simples",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, onChange]);
 
   return (
     <div className="space-y-5">

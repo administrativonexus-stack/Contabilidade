@@ -34,20 +34,21 @@ export default function CalculatorForm({ onChange }: Props) {
     mode: "onChange",
   });
 
-  const watched = watch();
-
   useEffect(() => {
-    const salary = Number(watched.salary) || 0;
-    if (salary >= 100) {
-      onChange({
-        salary,
-        transportation: Number(watched.transportation) || 0,
-        meal: Number(watched.meal) || 0,
-        health: Number(watched.health) || 0,
-        regime: watched.regime ?? "simples",
-      });
-    }
-  }, [watched, onChange]);
+    const { unsubscribe } = watch((value) => {
+      const salary = Number(value.salary) || 0;
+      if (salary >= 100) {
+        onChange({
+          salary,
+          transportation: Number(value.transportation) || 0,
+          meal: Number(value.meal) || 0,
+          health: Number(value.health) || 0,
+          regime: value.regime ?? "simples",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, onChange]);
 
   return (
     <div className="space-y-5">

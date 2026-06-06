@@ -37,19 +37,20 @@ export default function AberturaEmpresaForm({ onChange }: Props) {
     mode: "onChange",
   });
 
-  const watched = watch();
-
   useEffect(() => {
-    const monthly = Number(watched.monthlyRevenue) || 0;
-    if (monthly >= 500) {
-      onChange({
-        monthlyRevenue: monthly,
-        businessType: watched.businessType ?? "servicos",
-        partners: Number(watched.partners) || 1,
-        structure: watched.structure ?? "ltda",
-      });
-    }
-  }, [watched, onChange]);
+    const { unsubscribe } = watch((value) => {
+      const monthly = Number(value.monthlyRevenue) || 0;
+      if (monthly >= 500) {
+        onChange({
+          monthlyRevenue: monthly,
+          businessType: value.businessType ?? "servicos",
+          partners: Number(value.partners) || 1,
+          structure: value.structure ?? "ltda",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, onChange]);
 
   return (
     <div className="space-y-5">

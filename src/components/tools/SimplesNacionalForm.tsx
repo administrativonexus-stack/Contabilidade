@@ -36,18 +36,19 @@ export default function SimplesNacionalForm({ onChange }: Props) {
     mode: "onChange",
   });
 
-  const watched = watch();
-
   useEffect(() => {
-    const monthly = Number(watched.monthlyRevenue) || 0;
-    if (monthly >= 500) {
-      onChange({
-        monthlyRevenue: monthly,
-        annualRevenue: Number(watched.annualRevenue) || monthly * 12,
-        anexo: watched.anexo ?? "III",
-      });
-    }
-  }, [watched, onChange]);
+    const { unsubscribe } = watch((value) => {
+      const monthly = Number(value.monthlyRevenue) || 0;
+      if (monthly >= 500) {
+        onChange({
+          monthlyRevenue: monthly,
+          annualRevenue: Number(value.annualRevenue) || monthly * 12,
+          anexo: value.anexo ?? "III",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, onChange]);
 
   return (
     <div className="space-y-5">
