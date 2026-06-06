@@ -15,12 +15,12 @@ export const COMPANY = {
 export const WHATSAPP_URL = `https://wa.me/${COMPANY.whatsapp}?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20Nexus%20Contabilidade.`;
 
 export const NAV_LINKS = [
-  { label: "Serviços", href: "#servicos" },
-  { label: "Setores", href: "#setores" },
-  { label: "Sobre", href: "#sobre" },
+  { label: "Serviços", href: "/#servicos" },
+  { label: "Setores", href: "/#setores" },
+  { label: "Sobre", href: "/#sobre" },
   { label: "Ferramentas", href: "/tools" },
-  { label: "Blog", href: "#blog" },
-  { label: "Contato", href: "#contato" },
+  { label: "Blog", href: "/#blog" },
+  { label: "Contato", href: "/#contato" },
 ] as const;
 
 export const TOOLS = [
