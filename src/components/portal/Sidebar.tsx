@@ -38,7 +38,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex flex-col w-60 min-h-screen bg-[#0F3D5E] fixed left-0 top-0 z-20">
+    <aside className="hidden lg:flex flex-col w-60 h-screen bg-[#0F3D5E] fixed left-0 top-0 z-20">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-6 py-5 border-b border-white/10">
         <div className="w-8 h-8 rounded-lg bg-[#2563EB] flex items-center justify-center flex-shrink-0">
@@ -51,7 +51,7 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/30">
         {mainItems.map(({ href, label, icon: Icon }) => {
           const active = pathname.startsWith(href);
           return (
