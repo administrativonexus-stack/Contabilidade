@@ -3,11 +3,6 @@ import { createClient } from "@supabase/supabase-js";
 import { leadSchema } from "@/lib/validations";
 import type { Database } from "@/types/database";
 
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -21,6 +16,11 @@ export async function POST(req: NextRequest) {
     }
 
     const { name, company, email, phone, revenue } = parsed.data;
+
+    const supabase = createClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     await supabase.from("crm_leads").insert({
       name,
