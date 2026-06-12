@@ -3,33 +3,48 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isRedirectError = (e: unknown) => typeof (e as any)?.digest === "string" && (e as any).digest.startsWith("NEXT_REDIRECT");
+
 export async function signIn(formData: FormData) {
-  const supabase = await createClient();
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+      return { error: "Configuração do servidor incompleta. Contate o suporte." };
+    }
 
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+    const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: "E-mail ou senha incorretos." };
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Erro ao autenticar. Tente novamente." };
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { error: "E-mail ou senha incorretos." };
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("role")
-    .eq("auth_user_id", user.id)
-    .single();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Erro ao autenticar. Tente novamente." };
 
-  await supabase
-    .from("users")
-    .update({ last_login_at: new Date().toISOString() })
-    .eq("auth_user_id", user.id);
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("auth_user_id", user.id)
+      .single();
 
-  if (profile?.role === "admin" || profile?.role === "super_admin") {
-    redirect("/admin/dashboard");
+    await supabase
+      .from("users")
+      .update({ last_login_at: new Date().toISOString() })
+      .eq("auth_user_id", user.id);
+
+    if (profile?.role === "admin" || profile?.role === "super_admin") {
+      redirect("/admin/dashboard");
+    }
+    redirect("/client-portal/dashboard");
+  } catch (e) {
+    if (isRedirectError(e)) throw e;
+    console.error("[signIn error]", e);
+    return { error: `Erro interno: ${e instanceof Error ? e.message : String(e)}` };
   }
-  redirect("/client-portal/dashboard");
 }
 
 export async function signOut() {
