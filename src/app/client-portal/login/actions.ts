@@ -20,7 +20,7 @@ export async function signIn(formData: FormData) {
     const password = formData.get("password") as string;
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { error: `[debug] ${error.message}` };
+    if (error) return { error: "E-mail ou senha incorretos." };
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "Erro ao autenticar. Tente novamente." };
