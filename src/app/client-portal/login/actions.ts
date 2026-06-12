@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -11,10 +10,7 @@ export async function signIn(formData: FormData) {
   const password = formData.get("password") as string;
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    return { error: "E-mail ou senha incorretos." };
-  }
+  if (error) return { error: "E-mail ou senha incorretos." };
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Erro ao autenticar. Tente novamente." };
@@ -25,13 +21,10 @@ export async function signIn(formData: FormData) {
     .eq("auth_user_id", user.id)
     .single();
 
-  // Update last_login_at
   await supabase
     .from("users")
     .update({ last_login_at: new Date().toISOString() })
     .eq("auth_user_id", user.id);
-
-  revalidatePath("/", "layout");
 
   if (profile?.role === "admin" || profile?.role === "super_admin") {
     redirect("/admin/dashboard");
@@ -42,7 +35,6 @@ export async function signIn(formData: FormData) {
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  revalidatePath("/", "layout");
   redirect("/client-portal/login");
 }
 
